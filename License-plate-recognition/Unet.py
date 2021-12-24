@@ -9,7 +9,7 @@ from tensorflow.keras import layers, losses, models
 def unet_train():
     height = 512
     width = 512
-    path = 'D:/desktop/unet_datasets/'
+    path = 'E:\\深度学习\\车牌识别\\TF_plate_recognition\\End-to-end-for-chinese-plate-recognition\\'
     input_name = os.listdir(path + 'train_image')
     n = len(input_name)
     print(n)
@@ -31,6 +31,7 @@ def unet_train():
         return x
 
     def Conv2dT_BN(x, filters, kernel_size, strides=(2, 2), padding='same'):
+        # 反卷积
         x = layers.Conv2DTranspose(filters, kernel_size, strides=strides, padding=padding)(x)
         x = layers.BatchNormalization(axis=3)(x)
         x = layers.LeakyReLU(alpha=0.1)(x)
@@ -110,5 +111,4 @@ def unet_predict(unet, img_src_path):
     img_mask = img_mask / np.max(img_mask) * 255  # 归一化后乘以255
     img_mask[:, :, 2] = img_mask[:, :, 1] = img_mask[:, :, 0]  # 三个通道保持相同
     img_mask = img_mask.astype(np.uint8)  # 将img_mask类型转为int型
-
     return img_src, img_mask
